@@ -9,11 +9,15 @@ class Groups:
 
     def findById(
         id: int):
-        return mGroups[id]
+        if id < len(mGroups):
+            return mGroups[id]
+        return None
 
     def deleteById(
         id: int):
-        del mGroups[id]
+        if id < len(mGroups):
+            del mGroups[id]
+        return None
 
     def json():
         json = []

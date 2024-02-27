@@ -9,7 +9,9 @@ class Participants:
 
     def getById(
         id: int):
-        return mParticipants[id]
+        if id < len(mParticipants):
+            return mParticipants[id]
+        return None
 
     def deleteById(
         id: int):

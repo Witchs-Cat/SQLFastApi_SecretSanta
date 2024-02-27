@@ -20,6 +20,12 @@ class Group:
     def getParticipants():
         return mParticipants
 
+    def getName():
+        return mName
+    
+    def getDescription():
+        return mDescription
+
     def json():
         return {
             "id": mId,
