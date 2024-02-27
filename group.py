@@ -1,4 +1,5 @@
 
+from participant import Participant
 class Group:
 
     mId: int
@@ -7,13 +8,15 @@ class Group:
     mParticipants: [Participant]
 
     def __init__(self,
-        id,
-        name,
-        description):
+        id: int,
+        name: str,
+        description: str,
+        participants: [Participant]):
 
         mId = id
         mName = name
         mDescription = description
+        mParticipants = participants
         
     def json():
         return {

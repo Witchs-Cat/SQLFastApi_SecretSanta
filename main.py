@@ -15,10 +15,6 @@ groups = Groups([
 def read_root():
     return "It just not works :( @Todd Howard"
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q} 
-
 @app.get("/group/{id}")
 def read_groupId(id: int):
     return groups.findById(id).json()

@@ -2,24 +2,33 @@
 from participant import Participant
 from recipient import Recipient
 
-class Participant(Recipient):
-    
-    mRecipients: [Recipient]
+class Participant(Recipient): #Inheritance sucks in Python. Script kiddies
+
+    mRecipients: Recipient
 
     def __init__(self,
         id: int,
         name: str,
         wish: str,
-        recipients: [Recipient]):
+        recipient: Recipient):
 
-        mId = id
-        mName = name
-        mWish = wish
-        mRecipients = recipients
+        mRecipient = recipient
+
+        Recipient.__init__(
+            self,
+            id= id,
+            name= name,
+            wish= wish
+        )
 
 
     def json():
         return {
-
+            "id": mId,
+            "name": mName,
+            "wish": mWish,
+            "recipient": {
+                "id": mRecipient.mId
+            }
         }
 
