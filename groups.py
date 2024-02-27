@@ -1,4 +1,3 @@
-
 from group import Group
 
 class Groups:
@@ -10,7 +9,15 @@ class Groups:
 
     def findById(
         id: int):
-        return mGroups[id]
+        if id < len(mGroups):
+            return mGroups[id]
+        return None
+
+    def deleteById(
+        id: int):
+        if id < len(mGroups):
+            del mGroups[id]
+        return None
 
     def json():
         json = []

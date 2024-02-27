@@ -1,4 +1,3 @@
-
 from participant import Participant
 class Group:
 
@@ -17,7 +16,16 @@ class Group:
         mName = name
         mDescription = description
         mParticipants = participants
-        
+    
+    def getParticipants():
+        return mParticipants
+
+    def getName():
+        return mName
+    
+    def getDescription():
+        return mDescription
+
     def json():
         return {
             "id": mId,
