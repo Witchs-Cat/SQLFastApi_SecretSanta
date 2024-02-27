@@ -1,4 +1,3 @@
-
 from participant import Participant
 from recipient import Recipient
 
