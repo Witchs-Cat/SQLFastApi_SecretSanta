@@ -7,7 +7,7 @@ from fastapi import FastAPI
 ITEM_NOT_FOUND = "Item not found :("
 
 app = FastAPI(
-    docs_url="swagger"
+    docs_url="/swagger"
 )
 
 groups = Groups([
@@ -58,6 +58,9 @@ def put_groupId(
 
     if group == None:
         return ITEM_NOT_FOUND
+
+    group.mName = name
+    group.mDescription = description
 
     return {
         "name": group.getName(),

@@ -1,18 +1,19 @@
+from typing import List
 from participant import Participant
 
 class Participants:
-    mParticipants: [Participant]
+    mParticipants: List[Participant]
 
     def __init__(
-        participants: [Participant]):
+        participants: List[Participant]):
         mParticipants = participants
 
-    def getById(
+    def getById(self,
         id: int):
-        if id < len(mParticipants):
-            return mParticipants[id]
+        if id < len(self.mParticipants):
+            return self.mParticipants[id]
         return None
 
-    def deleteById(
+    def deleteById(self,
         id: int):
-        del mParticipants[id]
+        del self.mParticipants[id]

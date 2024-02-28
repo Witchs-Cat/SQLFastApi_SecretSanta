@@ -14,7 +14,7 @@ class Recipient:
         mWish = wish
 
 
-    def json():
+    def json(self):
         return {
                
         }

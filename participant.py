@@ -1,17 +1,16 @@
-from participant import Participant
+
 from recipient import Recipient
 
 class Participant(Recipient): #Inheritance sucks in Python. Script kiddies
-
-    mRecipients: Recipient
+    mRecipient: Recipient
 
     def __init__(self,
         id: int,
         name: str,
         wish: str,
-        recipient: Recipient):
+        recipient: Recipient = None):
 
-        mRecipient = recipient
+        self.mRecipient = recipient
 
         Recipient.__init__(
             self,
@@ -21,13 +20,13 @@ class Participant(Recipient): #Inheritance sucks in Python. Script kiddies
         )
 
 
-    def json():
+    def json(self:Recipient):
         return {
-            "id": mId,
-            "name": mName,
-            "wish": mWish,
+            "id": self.mId,
+            "name": self.mName,
+            "wish": self.mWish,
             "recipient": {
-                "id": mRecipient.mId
+                "id": self.mRecipient.mId
             }
         }
 

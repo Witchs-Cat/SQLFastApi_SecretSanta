@@ -1,28 +1,29 @@
+from typing import List
 from group import Group
 
 class Groups:
-    mGroups: [Group]
+    mGroups: List[Group]
 
     def __init__(self,
-        groups: [Group]):
-        mGroups = groups
+        groups: List[Group]):
+        self.mGroups = groups
 
-    def findById(
+    def findById(self,
         id: int):
-        if id < len(mGroups):
-            return mGroups[id]
+        if id < len(self.mGroups):
+            return self.mGroups[id]
         return None
 
-    def deleteById(
+    def deleteById(self,
         id: int):
-        if id < len(mGroups):
-            del mGroups[id]
+        if id < len(self.mGroups):
+            del self.mGroups[id]
         return None
 
-    def json():
+    def json(self):
         json = []
 
-        for j in mGroups:
+        for j in self.mGroups:
             json.append(j.json())
 
         return json

@@ -1,34 +1,35 @@
+from typing import List
 from participant import Participant
 class Group:
 
     mId: int
     mName: str
     mDescription: str
-    mParticipants: [Participant]
+    mParticipants: List[Participant]
 
     def __init__(self,
         id: int,
         name: str,
         description: str,
-        participants: [Participant]):
+        participants: List[Participant] = None):
 
-        mId = id
-        mName = name
-        mDescription = description
-        mParticipants = participants
+        self.mId = id
+        self.mName = name
+        self.mDescription = description
+        self.mParticipants = participants
     
-    def getParticipants():
-        return mParticipants
+    def getParticipants(self):
+        return self.mParticipants
 
-    def getName():
-        return mName
+    def getName(self):
+        return self.mName
     
-    def getDescription():
-        return mDescription
+    def getDescription(self):
+        return self.mDescription
 
-    def json():
+    def json(self):
         return {
-            "id": mId,
-            "name": mName,
-            "description": mDescription
+            "id": self.mId,
+            "name": self.mName,
+            "description": self.mDescription
         }
