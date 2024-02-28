@@ -1,4 +1,5 @@
 import uvicorn
+from pysondb import db
 from group import Group
 from groups import Groups
 from typing import Union
@@ -6,14 +7,17 @@ from fastapi import FastAPI
 
 ITEM_NOT_FOUND = "Item not found :("
 
+database = db.getDb('groups.json')
+
 app = FastAPI(
     docs_url="/swagger"
 )
 
-groups = Groups([
-    Group(1, "asd", "asd"),
-    Group(2, "fsdfsdfdsf", "asdsadsadsad")
-])
+def getGroupById(id: int):
+    try:
+        return database.getById(id)
+    except:
+        return None
 
 def getParticipants(
     groupId: int):
@@ -27,7 +31,7 @@ def getParticipants(
 
 @app.get("/")
 def read_root():
-    return "It just not works :( @Todd Howard"
+    return "It just not works :(\n@Todd Howard"
 
 # Python sucks in OOP, sorry dude :)
 # CODE BELOW IS F***ING HORRIBLE ASS
@@ -35,41 +39,42 @@ def read_root():
 @app.get("/group/{id}")
 def read_groupId(
     id: int):
-    group = groups.findById(id)
-
-    if group == None:
-        return ITEM_NOT_FOUND
-    
-    return group.json()
+    return getGroupById(id)
 
 @app.delete("/group/{id}")
 def delete_groupId(
     id: int):
-    groups.deleteById(id)
-    return "{id}Removed"
-
+    try:
+        database.deleteById(id)
+        return id +" was removed"
+    except:
+        return ITEM_NOT_FOUND
+    
 @app.put("/group/{id}")
 def put_groupId(
     id: int,
     name: str,
     description: str):
 
-    group = groups.findById(id)
+    group = getGroupById(id)
 
     if group == None:
-        return ITEM_NOT_FOUND
+        database.add({
+            "name": name,
+            "description": description
+        })
+        return "Successfully added to database"
 
-    group.mName = name
-    group.mDescription = description
+    database.updateById(str(id), {
+        "name": name,
+        "description": description
+    })
 
-    return {
-        "name": group.getName(),
-        "description": group.getDescription()
-    }
+    return "Successfully updated in database"
 
 @app.get("/groups")
 def read_groups():
-    return groups.json()
+    return database.getAll()
 
 @app.delete("/group/{groupId}/participant/{participantId}")
 def delete_participant(
