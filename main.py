@@ -2,7 +2,9 @@ import uvicorn
 from typing import Union
 from fastapi import FastAPI
 
-app = FastAPI()
+app = FastAPI(
+    docs_url='/swagger'
+)
 
 @app.get("/")
 def read_root():
