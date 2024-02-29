@@ -1,17 +1,23 @@
 import uvicorn
-from pysondb import db
+from fastapi import FastAPI
 from group import Group
 from groups import Groups
 from typing import Union
-from fastapi import FastAPI
 
 ITEM_NOT_FOUND = "Item not found :("
-
-database = db.getDb('groups.json')
 
 app = FastAPI(
     docs_url="/swagger"
 )
+
+con = sql.connect("secret.db")
+cur = con.cursor()
+
+#cur.execute("create table groups(id Integer, name Text, description Text);")
+cur.execute("INSERT INTO groups VALUES (4, 'Daniil', 'MyGroup');")
+
+res = cur.execute("SELECT * from groups;")
+print(res.fetchone())
 
 def getGroupById(id: int):
     try:
@@ -51,19 +57,23 @@ def delete_groupId(
         return ITEM_NOT_FOUND
     
 @app.put("/group/{id}")
-def put_groupId(
+async def put_groupId(
     id: int,
     name: str,
     description: str):
 
     group = getGroupById(id)
 
-    if group == None:
-        database.add({
+    print("GROUP CHECK:", group, id, name, description)
+
+    if group is None:
+        database.add(id, {
             "name": name,
             "description": description
         })
         return "Successfully added to database"
+
+    print("GROUP UPDATE:", group, id, name, description)
 
     database.updateById(str(id), {
         "name": name,
