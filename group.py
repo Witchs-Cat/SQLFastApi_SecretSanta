@@ -1,35 +1,45 @@
 from typing import List
-from participant import Participant
-class Group:
+from database import Database
 
-    mId: int
-    mName: str
-    mDescription: str
-    mParticipants: List[Participant]
+class Group(Database):
 
-    def __init__(self,
+    TABLE_NAME ="groups"
+    KEY_ID = "id"
+    KEY_NAME = "name"
+    KEY_DESC = "description"
+
+    def __init__(self):
+        Database.__init__(
+            self,
+            "secret.db")
+        
+        Database.create(self,
+            self.TABLE_NAME,
+            f"{self.KEY_ID} Integer, {self.KEY_NAME} Text, {self.KEY_DESC} Text"
+        )
+        
+        pass
+
+    def put(self,
         id: int,
         name: str,
-        description: str,
-        participants: List[Participant] = None):
+        description: str):
 
-        self.mId = id
-        self.mName = name
-        self.mDescription = description
-        self.mParticipants = participants
-    
-    def getParticipants(self):
-        return self.mParticipants
+        Database.insert(self, self.TABLE_NAME, f"{id}, '{name}', '{description}'")
 
-    def getName(self):
-        return self.mName
-    
-    def getDescription(self):
-        return self.mDescription
+        pass
 
-    def json(self):
+    def getById(self,
+        id: int):
+        
+        groupId, name, description = self.selectById(
+            id,
+            self.TABLE_NAME,
+            f"{self.KEY_ID}, {self.KEY_NAME}, {self.KEY_DESC}"
+        )
+
         return {
-            "id": self.mId,
-            "name": self.mName,
-            "description": self.mDescription
+            self.KEY_ID:  groupId,
+            self.KEY_NAME: name,
+            self.KEY_DESC: description
         }

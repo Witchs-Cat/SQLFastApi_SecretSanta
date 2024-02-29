@@ -1,7 +1,7 @@
 import uvicorn
+from database import Database
 from fastapi import FastAPI
 from group import Group
-from groups import Groups
 from typing import Union
 
 ITEM_NOT_FOUND = "Item not found :("
@@ -10,20 +10,7 @@ app = FastAPI(
     docs_url="/swagger"
 )
 
-con = sql.connect("secret.db")
-cur = con.cursor()
-
-#cur.execute("create table groups(id Integer, name Text, description Text);")
-cur.execute("INSERT INTO groups VALUES (4, 'Daniil', 'MyGroup');")
-
-res = cur.execute("SELECT * from groups;")
-print(res.fetchone())
-
-def getGroupById(id: int):
-    try:
-        return database.getById(id)
-    except:
-        return None
+group = Group()
 
 def getParticipants(
     groupId: int):
@@ -45,75 +32,44 @@ def read_root():
 @app.get("/group/{id}")
 def read_groupId(
     id: int):
-    return getGroupById(id)
+    return group.getById(id)
 
 @app.delete("/group/{id}")
 def delete_groupId(
     id: int):
-    try:
-        database.deleteById(id)
-        return id +" was removed"
-    except:
-        return ITEM_NOT_FOUND
+    return "dddd"
     
 @app.put("/group/{id}")
 async def put_groupId(
     id: int,
     name: str,
     description: str):
-
-    group = getGroupById(id)
-
-    print("GROUP CHECK:", group, id, name, description)
-
-    if group is None:
-        database.add(id, {
-            "name": name,
-            "description": description
-        })
-        return "Successfully added to database"
-
-    print("GROUP UPDATE:", group, id, name, description)
-
-    database.updateById(str(id), {
-        "name": name,
-        "description": description
-    })
-
+    
+    group.put(
+        id,
+        name,
+        description
+    )
+    
     return "Successfully updated in database"
 
 @app.get("/groups")
 def read_groups():
-    return database.getAll()
+    return "groups"
 
 @app.delete("/group/{groupId}/participant/{participantId}")
 def delete_participant(
     groupId: int,
     participantId: int):
 
-    parts = getParticipants()
-
-    if parts == None:
-        return ITEM_NOT_FOUND
-
-    parts.deleteById(participantId)
+    pass
 
 @app.get("/group/{groupId}/participant/{participantId}/recipient")    
 def read_recipient(
     groupId: int,
     participantId: int):
 
-    parts = getParticipants(groupId)
-
-    if parts == None:
-        return ITEM_NOT_FOUND
-
-    participant = parts.getById(participantId)
-
-    if participant == None:
-        return ITEM_NOT_FOUND
-
-    return participant.json()
+    return "sadsad"
 
 
 if __name__ == "__main__":
