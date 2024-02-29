@@ -1,17 +1,16 @@
+from sqlite3 import Connection
 from typing import List
-from group import Group
 
-class Groups:
-    mGroups: List[Group]
+from models.group import Group
+from collection import BaseCollection
 
+class Groups(BaseCollection):
     def __init__(self,
-        groups: List[Group]):
-        self.mGroups = groups
+        db: Connection):
+        super().__init__(db, "groups", Group.__annotations__)        
 
-    def geJson(self):
-        json = []
+    def getById(self, id: int):
+        pass
 
-        for j in self.mGroups:
-            json.append(j.json())
-
-        return json
+    def put(self, group: Group):
+        self.insert(group.to_json())

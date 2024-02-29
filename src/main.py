@@ -1,8 +1,11 @@
-import uvicorn
-from database import Database
-from fastapi import FastAPI
-from group import Group
 from typing import Union
+from fastapi import FastAPI
+import sqlite3
+import uvicorn
+
+from models.group import Group
+from groups import Groups
+
 
 ITEM_NOT_FOUND = "Item not found :("
 
@@ -10,7 +13,8 @@ app = FastAPI(
     docs_url="/swagger"
 )
 
-group = Group()
+sqlDb = sqlite3.connect("secret.db")
+groups = Groups(sqlDb)
 
 def getParticipants(
     groupId: int):
@@ -45,11 +49,11 @@ async def put_groupId(
     name: str,
     description: str):
     
-    group.put(
+    groups.put(Group(
         id,
         name,
         description
-    )
+    ))
     
     return "Successfully updated in database"
 

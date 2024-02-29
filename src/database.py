@@ -15,7 +15,7 @@ class Database:
         self.mCursor = self.mConnection.cursor()
         pass
 
-    def create(self,
+    def createTabel(self,
         table: str,
         fields: str):
 
