@@ -29,8 +29,7 @@ class Group(Database):
 
         content = Database.selectById(
             self,
-            id,
-            self.TABLE_NAME
+            id
         )
 
         if content is None:
@@ -44,6 +43,20 @@ class Group(Database):
             f"id={id}")
 
         return "Successfully updated in Database"
+
+    def selectAllJson(self):
+        result = self.selectAll()
+
+        json = []
+
+        for groupId, name, description in result:
+            json.append({
+                self.KEY_ID:  groupId,
+                self.KEY_NAME: name,
+                self.KEY_DESC: description
+            })
+
+        return json
 
     def getById(self,
         id: int):

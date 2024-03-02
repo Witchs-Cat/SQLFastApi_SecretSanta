@@ -33,7 +33,10 @@ class Database:
 
         self.mCursor.execute(f"select {fields} from {self.TABLE_NAME} where id={id};")
         return self.mCursor.fetchone()
-        
+    
+    def selectAll(self):
+        self.mCursor.execute(f"select * from {self.TABLE_NAME};")
+        return self.mCursor.fetchall()
 
     def insert(self,
         values: str):

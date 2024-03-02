@@ -28,12 +28,16 @@ def read_root():
 @app.get("/group/{id}")
 def read_groupId(
     id: int):
-    return group.getById(id)
+    
+    group = Group(DATABASE_NAME)
+    resp = group.getById(id)
+    group.close()
+
+    return resp
 
 @app.delete("/group/{id}")
 def delete_groupId(
     id: int):
-
     group = Group(DATABASE_NAME)
     group.deleteById(id)
     group.close()
@@ -60,10 +64,12 @@ def put_groupId(
 
 @app.get("/groups")
 def read_groups():
+    
+    group = Group(DATABASE_NAME)
+    response = group.selectAllJson()
+    group.close()
 
-
-
-    return "groups"
+    return response
 
 @app.delete("/group/{groupId}/participant/{participantId}")
 def delete_participant(
