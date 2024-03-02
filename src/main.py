@@ -33,7 +33,11 @@ def read_groupId(
 @app.delete("/group/{id}")
 def delete_groupId(
     id: int):
-    return "dddd"
+
+    group = Group(DATABASE_NAME)
+    group.deleteById(id)
+    group.close()
+    return "Group is successfully deleted"
     
 @app.put("/group/{id}")
 def put_groupId(
@@ -56,6 +60,9 @@ def put_groupId(
 
 @app.get("/groups")
 def read_groups():
+
+
+
     return "groups"
 
 @app.delete("/group/{groupId}/participant/{participantId}")

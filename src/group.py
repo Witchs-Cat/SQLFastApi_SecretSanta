@@ -8,13 +8,15 @@ class Group(Database):
     KEY_NAME = "name"
     KEY_DESC = "description"
 
-    def __init__(self, dbName: str):
+    def __init__(self,
+        dbName: str):
+
         Database.__init__(
             self,
-            dbName)
+            dbName,
+            self.TABLE_NAME)
         
         Database.create(self,
-            self.TABLE_NAME,
             f"{self.KEY_ID} Integer, {self.KEY_NAME} Text, {self.KEY_DESC} Text"
         )
         
@@ -33,13 +35,11 @@ class Group(Database):
 
         if content is None:
             Database.insert(self,
-                self.TABLE_NAME,
                 f"{id}, '{name}', '{description}'"
             )
             return "Successfully inserted to Database"
 
         Database.update(self,
-            self.TABLE_NAME,
             f"id={id}, name='{name}', description='{description}'",
             f"id={id}")
 
@@ -50,7 +50,6 @@ class Group(Database):
         
         groupId, name, description = self.selectById(
             id,
-            self.TABLE_NAME,
             f"{self.KEY_ID}, {self.KEY_NAME}, {self.KEY_DESC}"
         )
 

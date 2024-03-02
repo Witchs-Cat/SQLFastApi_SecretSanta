@@ -7,47 +7,52 @@ class Database:
     mConnection: Connection
     mCursor: Cursor
 
+    TABLE_NAME = ""
     QUERY_SELECT_ALL = "*"
 
     def __init__(
         self,
-        dbName: str):
+        dbName: str,
+        tableName: str):
         
         self.mConnection = sql.connect(dbName)
+        self.TABLE_NAME = tableName
         self.mCursor = self.mConnection.cursor()
         pass
 
     def create(self,
-        table: str,
         fields: str):
 
-        print("create: ", self.mCursor.execute(f"create table if not exists {table} ({fields});"))
+        print("create: ", self.mCursor.execute(f"create table if not exists {self.TABLE_NAME} ({fields});"))
         
         pass
 
     def selectById(self,
         id: int,
-        table: str,
         fields: str = QUERY_SELECT_ALL):
 
-        self.mCursor.execute(f"select {fields} from {table} where id={id};")
+        self.mCursor.execute(f"select {fields} from {self.TABLE_NAME} where id={id};")
         return self.mCursor.fetchone()
         
 
     def insert(self,
-        table: str,
         values: str):
         
-        self.mCursor.execute(f"insert into {table} values ({values});")
+        self.mCursor.execute(f"insert into {self.TABLE_NAME} values ({values});")
+        self.mConnection.commit()
+        pass
+
+    def deleteById(self,
+        id: int):
+        self.mCursor.execute(f"delete from {self.TABLE_NAME} where id={id}")
         self.mConnection.commit()
         pass
 
     def update(self,
-        table: str,
         values: str,
         where: str):
         
-        self.mCursor.execute(f"UPDATE {table} SET {values} WHERE {where};")
+        self.mCursor.execute(f"UPDATE {self.TABLE_NAME} SET {values} WHERE {where};")
         self.mConnection.commit()
 
         pass
