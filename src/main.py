@@ -1,26 +1,22 @@
 import uvicorn
+import sqlite3 as sql
 from database import Database
 from fastapi import FastAPI
 from group import Group
 from typing import Union
 
 ITEM_NOT_FOUND = "Item not found :("
+DATABASE_NAME = "secret.db"
 
 app = FastAPI(
     docs_url="/swagger"
 )
 
-group = Group()
 
 def getParticipants(
     groupId: int):
 
-    group = groups.findById(groupId)
-
-    if group == None:
-        return None
-
-    return group.getParticipants()
+    return "PARTICIPS"
 
 @app.get("/")
 def read_root():
@@ -40,18 +36,23 @@ def delete_groupId(
     return "dddd"
     
 @app.put("/group/{id}")
-async def put_groupId(
+def put_groupId(
     id: int,
     name: str,
     description: str):
-    
-    group.put(
+
+    group = Group(DATABASE_NAME)
+
+    response = group.put(
         id,
         name,
         description
     )
-    
-    return "Successfully updated in database"
+
+    # Вы кто такие? Я вас не звал, идите в другой поток
+    group.close()
+
+    return response
 
 @app.get("/groups")
 def read_groups():

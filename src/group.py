@@ -8,10 +8,10 @@ class Group(Database):
     KEY_NAME = "name"
     KEY_DESC = "description"
 
-    def __init__(self):
+    def __init__(self, dbName: str):
         Database.__init__(
             self,
-            "secret.db")
+            dbName)
         
         Database.create(self,
             self.TABLE_NAME,
@@ -23,11 +23,27 @@ class Group(Database):
     def put(self,
         id: int,
         name: str,
-        description: str):
+        description: str) -> str:
 
-        Database.insert(self, self.TABLE_NAME, f"{id}, '{name}', '{description}'")
+        content = Database.selectById(
+            self,
+            id,
+            self.TABLE_NAME
+        )
 
-        pass
+        if content is None:
+            Database.insert(self,
+                self.TABLE_NAME,
+                f"{id}, '{name}', '{description}'"
+            )
+            return "Successfully inserted to Database"
+
+        Database.update(self,
+            self.TABLE_NAME,
+            f"id={id}, name='{name}', description='{description}'",
+            f"id={id}")
+
+        return "Successfully updated in Database"
 
     def getById(self,
         id: int):

@@ -7,6 +7,8 @@ class Database:
     mConnection: Connection
     mCursor: Cursor
 
+    QUERY_SELECT_ALL = "*"
+
     def __init__(
         self,
         dbName: str):
@@ -26,7 +28,7 @@ class Database:
     def selectById(self,
         id: int,
         table: str,
-        fields: str):
+        fields: str = QUERY_SELECT_ALL):
 
         self.mCursor.execute(f"select {fields} from {table} where id={id};")
         return self.mCursor.fetchone()
@@ -46,5 +48,11 @@ class Database:
         where: str):
         
         self.mCursor.execute(f"UPDATE {table} SET {values} WHERE {where};")
+        self.mConnection.commit()
 
+        pass
+
+    def close(self):
+        self.mCursor.close()
+        self.mConnection.close()
         pass
