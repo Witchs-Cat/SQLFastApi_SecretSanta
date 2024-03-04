@@ -12,7 +12,6 @@ app = FastAPI(
     docs_url="/swagger"
 )
 
-
 def getParticipants(
     groupId: int):
 

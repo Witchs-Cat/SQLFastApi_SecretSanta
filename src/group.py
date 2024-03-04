@@ -61,10 +61,15 @@ class Group(Database):
     def getById(self,
         id: int):
         
-        groupId, name, description = self.selectById(
+        content = self.selectById(
             id,
             f"{self.KEY_ID}, {self.KEY_NAME}, {self.KEY_DESC}"
         )
+
+        if content is None:
+            return "Item not found"
+
+        groupId, name, description = content
 
         return {
             self.KEY_ID:  groupId,
