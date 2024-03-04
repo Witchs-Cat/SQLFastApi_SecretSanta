@@ -39,7 +39,7 @@ class Database:
 
         query = f"select * from {self.TABLE_NAME}"
 
-        if where is None or len(where) >= 3:
+        if not(where is None) and len(where) >= 3:
             query += f" where {where}"
 
         self.mCursor.execute(query +";")
