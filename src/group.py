@@ -1,5 +1,6 @@
 from typing import List
 from database import Database
+from participant import Participant
 
 class Group(Database):
 
@@ -7,6 +8,7 @@ class Group(Database):
     KEY_ID = "id"
     KEY_NAME = "name"
     KEY_DESC = "description"
+    KEY_PARTICIPANTS = "participants"
 
     def __init__(self,
         dbName: str):
@@ -17,7 +19,11 @@ class Group(Database):
             self.TABLE_NAME)
         
         Database.create(self,
-            f"{self.KEY_ID} Integer, {self.KEY_NAME} Text, {self.KEY_DESC} Text"
+            f"""
+                {self.KEY_ID} Integer,
+                {self.KEY_NAME} Text,
+                {self.KEY_DESC} Text
+            """
         )
         
         pass
@@ -58,11 +64,30 @@ class Group(Database):
 
         return json
 
+    def getParticipantsById(self,
+        id: int):
+
+        parts = Participant(
+            self.mConnection,
+            self.mCursor
+        )
+
+        json = []
+
+        for id, name, wish, partId in parts.selectAll(f"groupId={id}"):
+            json.append({
+                parts.KEY_ID: id,
+                parts.KEY_NAME: name,
+                parts.KEY_WISH: wish
+            })
+
+        return json
+
     def getById(self,
         id: int):
         
         content = self.selectById(
-            id,
+            id, 
             f"{self.KEY_ID}, {self.KEY_NAME}, {self.KEY_DESC}"
         )
 
@@ -74,5 +99,8 @@ class Group(Database):
         return {
             self.KEY_ID:  groupId,
             self.KEY_NAME: name,
-            self.KEY_DESC: description
+            self.KEY_DESC: description,
+            self.KEY_PARTICIPANTS: self.getParticipantsById(
+                groupId
+            )
         }

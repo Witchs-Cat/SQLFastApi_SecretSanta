@@ -34,8 +34,15 @@ class Database:
         self.mCursor.execute(f"select {fields} from {self.TABLE_NAME} where id={id};")
         return self.mCursor.fetchone()
     
-    def selectAll(self):
-        self.mCursor.execute(f"select * from {self.TABLE_NAME};")
+    def selectAll(self,
+        where: str = None):
+
+        query = f"select * from {self.TABLE_NAME}"
+
+        if where is None or len(where) >= 3:
+            query += f" where {where}"
+
+        self.mCursor.execute(query +";")
         return self.mCursor.fetchall()
 
     def insert(self,

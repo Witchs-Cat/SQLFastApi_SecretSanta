@@ -12,15 +12,6 @@ app = FastAPI(
     docs_url="/swagger"
 )
 
-def getParticipants(
-    groupId: int):
-
-    return "PARTICIPS"
-
-@app.get("/")
-def read_root():
-    return "It just not works :(\n@Todd Howard"
-
 # Python sucks in OOP, sorry dude :)
 # CODE BELOW IS F***ING HORRIBLE ASS
 # Groups
@@ -84,6 +75,9 @@ def read_recipient(
 
     return "sadsad"
 
+@app.get("/")
+def read_root():
+    return "It just not works :(\n@Todd Howard"
 
 if __name__ == "__main__":
     uvicorn.run(app, port=8080)
