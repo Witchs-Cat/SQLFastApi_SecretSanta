@@ -2,7 +2,7 @@ import uvicorn
 import random as rand
 import sqlite3 as sql
 from database import Database
-from pydantic import BaseModel
+from partModel import ParticipantItem
 from fastapi import FastAPI
 from group import Group
 from typing import Union
@@ -80,13 +80,12 @@ def read_recipient(
 @app.post("/group/{groupId}/participant")
 def write_partcipant(
     groupId: int,
-    name: str,
-    wish: str):
+    model: ParticipantItem):
 
     frac = rand.random()
     partId = frac * 9223372036854775807
 
-
+    print("MODEL: ", model.name)
 
     return partId
 
