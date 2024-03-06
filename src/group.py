@@ -28,7 +28,16 @@ class Group(Database):
         
         pass
 
-    def put(self,
+    def insert(self,
+        id: int,
+        name: str,
+        description: str):
+        Database.insert(self,
+            f"{id}, \"{name}\", \"{description}\""
+        )
+        return "Successfully inserted to Database"
+
+    def update(self,
         id: int,
         name: str,
         description: str) -> str:
@@ -39,10 +48,7 @@ class Group(Database):
         )
 
         if content is None:
-            Database.insert(self,
-                f"{id}, '{name}', '{description}'"
-            )
-            return "Successfully inserted to Database"
+            return "Group not found"
 
         Database.update(self,
             f"id={id}, name='{name}', description='{description}'",

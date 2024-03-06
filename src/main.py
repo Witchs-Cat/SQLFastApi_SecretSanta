@@ -1,10 +1,13 @@
 import uvicorn
 import random as rand
 import sqlite3 as sql
+
 from database import Database
-from partModel import ParticipantItem
-from fastapi import FastAPI
 from group import Group
+from participant import Participant
+from partModel import ParticipantItem
+from groupModel import GroupItem
+from fastapi import FastAPI
 from typing import Union
 
 ITEM_NOT_FOUND = "Item not found :("
@@ -16,9 +19,40 @@ app = FastAPI(
 
 # Python sucks in OOP, sorry dude :)
 # CODE BELOW IS F***ING HORRIBLE ASS
-# Groups
+
+# 1
+@app.post("/group")
+def add_group(
+    model: GroupItem):
+
+    id = generateId()
+
+    group = Group(
+        DATABASE_NAME
+    )
+
+    group.insert(
+        id,
+        model.name,
+        model.description
+    )
+
+    group.close()
+    return id
+
+# 2
+@app.get("/groups")
+def get_groups():
+    
+    group = Group(DATABASE_NAME)
+    response = group.selectAllJson()
+    group.close()
+
+    return response
+
+# 3
 @app.get("/group/{id}")
-def read_groupId(
+def get_info_by_group_Id(
     id: int):
     
     group = Group(DATABASE_NAME)
@@ -27,14 +61,7 @@ def read_groupId(
 
     return resp
 
-@app.delete("/group/{id}")
-def delete_groupId(
-    id: int):
-    group = Group(DATABASE_NAME)
-    group.deleteById(id)
-    group.close()
-    return "Group is successfully deleted"
-    
+# 4
 @app.put("/group/{id}")
 def put_groupId(
     id: int,
@@ -43,7 +70,7 @@ def put_groupId(
 
     group = Group(DATABASE_NAME)
 
-    response = group.put(
+    response = group.update(
         id,
         name,
         description
@@ -54,15 +81,36 @@ def put_groupId(
 
     return response
 
-@app.get("/groups")
-def read_groups():
-    
+
+# 5
+@app.delete("/group/{id}")
+def delete_group_Id(
+    id: int):
     group = Group(DATABASE_NAME)
-    response = group.selectAllJson()
+    group.deleteById(id)
     group.close()
+    return "Group is successfully deleted"
+    
 
-    return response
+# 6
+@app.post("/group/{groupId}/participant")
+def write_partcipant(
+    groupId: int,
+    model: ParticipantItem):
 
+    part = Participant(
+        DATABASE_NAME
+    )
+
+    part.insertById(
+        groupId,
+        model.name,
+        model.wish
+    )
+
+    return groupId
+
+# 7
 @app.delete("/group/{groupId}/participant/{participantId}")
 def delete_participant(
     groupId: int,
@@ -70,6 +118,13 @@ def delete_participant(
 
     pass
 
+# 8
+@app.post("/group/{id}/toss")
+def create_toss(
+    id: int):
+
+    return "toss"
+# 9
 @app.get("/group/{groupId}/participant/{participantId}/recipient")    
 def read_recipient(
     groupId: int,
@@ -77,21 +132,15 @@ def read_recipient(
 
     return "sadsad"
 
-@app.post("/group/{groupId}/participant")
-def write_partcipant(
-    groupId: int,
-    model: ParticipantItem):
-
-    frac = rand.random()
-    partId = frac * 9223372036854775807
-
-    print("MODEL: ", model.name)
-
-    return partId
 
 @app.get("/")
 def read_root():
     return "It just not works :(\n@Todd Howard"
+
+def generateId() -> int:
+    frac = rand.random()
+    return frac * 9223372036854775807
+
 
 if __name__ == "__main__":
     uvicorn.run(app, port=8080)

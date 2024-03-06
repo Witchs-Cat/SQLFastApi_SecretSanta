@@ -32,6 +32,17 @@ class Participant(Database):
         self.createPartTable()
         pass
 
+    def insertById(self,
+        id: int,
+        name: str,
+        wish: str = None):
+
+        Database.insert(self,
+            f"{id}, \"{name}\", \"{wish}\""
+        )
+        pass
+
+
     def getById(self,
         id: int):
 
