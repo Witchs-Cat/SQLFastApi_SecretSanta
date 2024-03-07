@@ -135,9 +135,14 @@ def delete_participant(
 def create_toss(
     id: int):
 
-    
-
-    return "toss"
+    part = Participant(
+        DATABASE_NAME
+    )
+    res = part.toss(
+        id
+    )
+    part.close()
+    return res
 
 # 9
 @app.get("/group/{groupId}/participant/{participantId}/recipient")    

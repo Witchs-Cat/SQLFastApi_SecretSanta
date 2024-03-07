@@ -22,16 +22,6 @@ class Participant(Database):
         self.createPartTable()
         pass
 
-    # def __init__(self,
-    #     connection: Connection,
-    #     cursor: Cursor):
-
-    #     self.mConnection = connection
-    #     self.mCursor = cursor
-        
-    #     self.createPartTable()
-    #     pass
-
     def insertById(self,
         id: int,
         name: str,
@@ -60,6 +50,26 @@ class Participant(Database):
             self.KEY_WISH: wish
         }
     
+    def toss(self,
+        groupId: int):
+        
+        res = Database.selectAll(self,
+            f"groupId={groupId}"
+        )
+
+        print("RES:", res)
+
+        json = []
+
+        for partId, name, wish, groupId in res:
+            json.append({
+                self.KEY_ID: partId,
+                self.KEY_NAME: name,
+                self.KEY_WISH: wish
+            })
+            pass
+
+        return json
 
     def createPartTable(self):
         Database.create(self,
