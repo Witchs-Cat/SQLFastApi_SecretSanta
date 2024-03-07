@@ -63,13 +63,43 @@ class Participant(Database):
 
         json = []
 
-        for partId, name, wish, groupId in res:
+        i = 1
+
+        prevPartId = 0
+        prevName = ""
+        prevWish = ""
+
+        while i < partCount:
+            partId, name, wish, _ = res[i]
+            prevPartId, prevName, prevWish, _ = res[i-1]
+            
             json.append({
                 self.KEY_ID: partId,
                 self.KEY_NAME: name,
-                self.KEY_WISH: wish
+                self.KEY_WISH: wish,
+                "recipient": {
+                    self.KEY_ID: prevPartId,
+                    self.KEY_NAME: prevName,
+                    self.KEY_WISH: prevWish
+                }
             })
+
+            i += 1
             pass
+        
+        partId, name, wish, _ = res[0]
+        prevPartId, prevName, prevWish, _ = res[partCount - 1]
+
+        json.append({
+            self.KEY_ID: partId,
+            self.KEY_NAME: name,
+            self.KEY_WISH: wish,
+            "recipient": {
+                self.KEY_ID: prevPartId,
+                self.KEY_NAME: prevName,
+                self.KEY_WISH: prevWish
+            }
+        })
 
         return (200, json)
 
