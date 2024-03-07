@@ -22,23 +22,24 @@ class Participant(Database):
         self.createPartTable()
         pass
 
-    def __init__(self,
-        connection: Connection,
-        cursor: Cursor):
+    # def __init__(self,
+    #     connection: Connection,
+    #     cursor: Cursor):
 
-        self.mConnection = connection
-        self.mCursor = cursor
+    #     self.mConnection = connection
+    #     self.mCursor = cursor
         
-        self.createPartTable()
-        pass
+    #     self.createPartTable()
+    #     pass
 
     def insertById(self,
         id: int,
         name: str,
+        groupId: int,
         wish: str = None):
 
         Database.insert(self,
-            f"{id}, \"{name}\", \"{wish}\""
+            f"{id}, \"{name}\", \"{wish}\",  \"{groupId}\""
         )
         pass
 

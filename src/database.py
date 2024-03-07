@@ -22,9 +22,9 @@ class Database:
 
     def create(self,
         fields: str):
-
-        print("create: ", self.mCursor.execute(f"create table if not exists {self.TABLE_NAME} ({fields});"))
-        
+        self.mCursor.execute(
+            f"create table if not exists {self.TABLE_NAME} ({fields});"
+        )
         pass
 
     def selectById(self,

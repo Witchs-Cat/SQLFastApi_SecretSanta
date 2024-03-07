@@ -105,6 +105,7 @@ def write_partcipant(
     part.insertById(
         groupId,
         model.name,
+        groupId,
         model.wish
     )
 
@@ -115,6 +116,8 @@ def write_partcipant(
 def delete_participant(
     groupId: int,
     participantId: int):
+    
+
 
     pass
 
@@ -131,11 +134,6 @@ def read_recipient(
     participantId: int):
 
     return "sadsad"
-
-
-@app.get("/")
-def read_root():
-    return "It just not works :(\n@Todd Howard"
 
 def generateId() -> int:
     frac = rand.random()
