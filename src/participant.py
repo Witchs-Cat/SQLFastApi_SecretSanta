@@ -51,7 +51,7 @@ class Participant(Database):
         }
     
     def toss(self,
-        groupId: int):
+        groupId: int) -> tuple[int, str]:
         
         res = Database.selectAll(self,
             f"groupId={groupId}"
@@ -59,7 +59,7 @@ class Participant(Database):
 
         partCount = len(res)
         if partCount < 3:
-            return "409 HTTP CODE: Not enougth partcipants. Need " + str(3-partCount)
+            return (409, "Not enought participants. Need " + str(3 - partCount))
 
         json = []
 
@@ -71,7 +71,7 @@ class Participant(Database):
             })
             pass
 
-        return json
+        return (200, str(json))
 
     def createPartTable(self):
         Database.create(self,

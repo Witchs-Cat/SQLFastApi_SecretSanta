@@ -8,6 +8,8 @@ from participant import Participant
 from partModel import ParticipantItem
 from groupModel import GroupItem
 from fastapi import FastAPI
+from fastapi import status
+from fastapi.responses import JSONResponse
 from typing import Union
 
 ITEM_NOT_FOUND = "Item not found :("
@@ -138,11 +140,15 @@ def create_toss(
     part = Participant(
         DATABASE_NAME
     )
-    res = part.toss(
+
+    (code, content) = part.toss(
         id
     )
+    
     part.close()
-    return res
+    return JSONResponse(
+        content=content,
+        status_code=code)
 
 # 9
 @app.get("/group/{groupId}/participant/{participantId}/recipient")    
