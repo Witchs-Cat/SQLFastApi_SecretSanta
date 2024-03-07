@@ -57,7 +57,9 @@ class Participant(Database):
             f"groupId={groupId}"
         )
 
-        print("RES:", res)
+        partCount = len(res)
+        if partCount < 3:
+            return "409 HTTP CODE: Not enougth partcipants. Need " + str(3-partCount)
 
         json = []
 
