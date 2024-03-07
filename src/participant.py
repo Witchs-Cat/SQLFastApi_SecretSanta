@@ -51,7 +51,7 @@ class Participant(Database):
         }
     
     def toss(self,
-        groupId: int) -> tuple[int, str]:
+        groupId: int) -> tuple[int, any]:
         
         res = Database.selectAll(self,
             f"groupId={groupId}"
@@ -71,7 +71,7 @@ class Participant(Database):
             })
             pass
 
-        return (200, str(json))
+        return (200, json)
 
     def createPartTable(self):
         Database.create(self,
