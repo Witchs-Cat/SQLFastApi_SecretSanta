@@ -31,7 +31,9 @@ class Database:
         id: int,
         fields: str = QUERY_SELECT_ALL):
 
-        self.mCursor.execute(f"select {fields} from {self.TABLE_NAME} where id={id};")
+        self.mCursor.execute(
+            f"select {fields} from {self.TABLE_NAME} where id={id};"
+        )
         return self.mCursor.fetchone()
     
     def selectAll(self,

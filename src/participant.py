@@ -10,6 +10,7 @@ class Participant(Database):
     KEY_NAME = "name"
     KEY_WISH = "wish"
     KEY_GROUP_ID = "groupId"
+    KEY_RECIPIENT = "recipient"
 
     def __init__(self,
         dbName: str):
@@ -59,7 +60,7 @@ class Participant(Database):
 
         partCount = len(res)
         if partCount < 3:
-            return (409, "Not enought participants. Need " + str(3 - partCount))
+            return (409, "Not enougth participants. Need " + str(3 - partCount))
 
         json = []
 
@@ -71,13 +72,15 @@ class Participant(Database):
 
         while i < partCount:
             partId, name, wish, _ = res[i]
-            prevPartId, prevName, prevWish, _ = res[i-1]
+
+            # ii = (i + 1) % partCount
+            prevPartId, prevName, prevWish, _ = res[i - 1] # ii
             
             json.append({
                 self.KEY_ID: partId,
                 self.KEY_NAME: name,
                 self.KEY_WISH: wish,
-                "recipient": {
+                self.KEY_RECIPIENT: {
                     self.KEY_ID: prevPartId,
                     self.KEY_NAME: prevName,
                     self.KEY_WISH: prevWish
@@ -94,7 +97,7 @@ class Participant(Database):
             self.KEY_ID: partId,
             self.KEY_NAME: name,
             self.KEY_WISH: wish,
-            "recipient": {
+            self.KEY_RECIPIENT: {
                 self.KEY_ID: prevPartId,
                 self.KEY_NAME: prevName,
                 self.KEY_WISH: prevWish
@@ -103,6 +106,7 @@ class Participant(Database):
 
         return (200, json)
 
+    
     def createPartTable(self):
         Database.create(self,
             f"""

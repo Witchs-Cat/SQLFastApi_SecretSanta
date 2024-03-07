@@ -9,20 +9,22 @@ class Group(Database):
     KEY_NAME = "name"
     KEY_DESC = "description"
     KEY_PARTICIPANTS = "participants"
+    KEY_TOSS = "toss"
 
     def __init__(self,
         dbName: str):
 
-        Database.__init__(
-            self,
+        super().__init__(
             dbName,
-            self.TABLE_NAME)
+            self.TABLE_NAME
+        )
         
-        Database.create(self,
+        super().create(
             f"""
                 {self.KEY_ID} Integer,
                 {self.KEY_NAME} Text,
-                {self.KEY_DESC} Text
+                {self.KEY_DESC} Text,
+                {self.KEY_TOSS} Bit
             """
         )
         
@@ -33,7 +35,7 @@ class Group(Database):
         name: str,
         description: str):
         Database.insert(self,
-            f"{id}, \"{name}\", \"{description}\""
+            f"{id}, \"{name}\", \"{description}\", 0"
         )
         return "Successfully inserted to Database"
 
@@ -42,17 +44,17 @@ class Group(Database):
         name: str,
         description: str) -> str:
 
-        content = Database.selectById(
-            self,
+        content = super().selectById(
             id
         )
 
         if content is None:
             return "Group not found"
 
-        Database.update(self,
+        super().update(
             f"id={id}, name='{name}', description='{description}'",
-            f"id={id}")
+            f"id={id}"
+        )
 
         return "Successfully updated in Database"
 
@@ -61,7 +63,7 @@ class Group(Database):
 
         json = []
 
-        for groupId, name, description in result:
+        for groupId, name, description, _ in result:
             json.append({
                 self.KEY_ID:  groupId,
                 self.KEY_NAME: name,
@@ -70,43 +72,19 @@ class Group(Database):
 
         return json
 
-    def getParticipantsById(self,
-        id: int):
-
-        parts = Participant(
-            self.mConnection,
-            self.mCursor
-        )
-
-        json = []
-
-        for id, name, wish, partId in parts.selectAll(f"groupId={id}"):
-            json.append({
-                parts.KEY_ID: id,
-                parts.KEY_NAME: name,
-                parts.KEY_WISH: wish
-            })
-
-        return json
-
-    def getById(self,
-        id: int):
+    def getByGroupId(self,
+        groupId: int) -> tuple[int, any]:
         
         content = self.selectById(
-            id, 
+            groupId, 
             f"{self.KEY_ID}, {self.KEY_NAME}, {self.KEY_DESC}"
         )
 
         if content is None:
-            return "Item not found"
+            return (409, "Group not found")
 
-        groupId, name, description = content
-
-        return {
-            self.KEY_ID:  groupId,
-            self.KEY_NAME: name,
-            self.KEY_DESC: description,
-            self.KEY_PARTICIPANTS: self.getParticipantsById(
-                groupId
-            )
-        }
+        return (200, {
+            self.KEY_ID: content[0],
+            self.KEY_NAME: content[1],
+            self.KEY_DESC: content[2]
+        })

@@ -58,10 +58,13 @@ def get_info_by_group_Id(
     id: int):
     
     group = Group(DATABASE_NAME)
-    resp = group.getById(id)
+    (code, content) = group.getByGroupId(id)
     group.close()
 
-    return resp
+    return JSONResponse(
+        content=content,
+        status_code=code
+    )
 
 # 4
 @app.put("/group/{id}")
@@ -157,13 +160,20 @@ def read_recipient(
     groupId: int,
     participantId: int):
 
-    
+    part = Participant(
+        DATABASE_NAME
+    )
 
-    return "sadsad"
+    resp = part.toss(
+        groupId
+    )
+
+    part.close()
+    return resp
 
 def generateId() -> int:
     frac = rand.random()
-    return frac * 9223372036854775807
+    return int(frac * 922337203685)
 
 if __name__ == "__main__":
     uvicorn.run(app, port=8080)
