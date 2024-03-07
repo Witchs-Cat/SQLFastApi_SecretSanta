@@ -102,31 +102,43 @@ def write_partcipant(
         DATABASE_NAME
     )
 
+    id = generateId()
+
     part.insertById(
-        groupId,
+        id,
         model.name,
         groupId,
         model.wish
     )
 
-    return groupId
+    return id
 
 # 7
 @app.delete("/group/{groupId}/participant/{participantId}")
 def delete_participant(
     groupId: int,
     participantId: int):
-    
 
+    part = Participant(
+        DATABASE_NAME
+    )
 
-    pass
+    part.deleteById(
+        participantId
+    )
+
+    part.close()
+    return "Successfully deleted"
 
 # 8
 @app.post("/group/{id}/toss")
 def create_toss(
     id: int):
 
+    
+
     return "toss"
+
 # 9
 @app.get("/group/{groupId}/participant/{participantId}/recipient")    
 def read_recipient(
@@ -138,7 +150,6 @@ def read_recipient(
 def generateId() -> int:
     frac = rand.random()
     return frac * 9223372036854775807
-
 
 if __name__ == "__main__":
     uvicorn.run(app, port=8080)
